@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void on_buttonSearch_clicked();
 };
 
 #endif // MAINWINDOW_HPP
