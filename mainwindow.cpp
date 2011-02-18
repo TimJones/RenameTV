@@ -4,8 +4,9 @@
 #include <QDir>
 #include <QTextStream>
 #include <QProgressDialog>
-
 #include <QMessageBox>
+
+#include "showholder.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
