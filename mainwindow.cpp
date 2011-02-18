@@ -41,27 +41,32 @@ void MainWindow::on_buttonSearch_clicked()
 
     fileIMDB.open( QFile::ReadOnly | QFile::Text );
 
+    int season, episode;
     QTextStream fileIMDBstream( &fileIMDB );
-    QString line, episode, title( tr( "\"" ) + ui->editName->text() + tr( "\"" ) );
+    QString line, name, show = ui->editName->text(), title( tr( "\"" ) + ui->editName->text() + tr( "\"" ) );
     QProgressDialog progress( tr( "Searching file" ), tr( "Abort search" ), 0, fileIMDB.size(), this );
+    ShowHolder shows;
 
     while( !fileIMDBstream.atEnd() )
     {
         line = fileIMDBstream.readLine();
         if( line.startsWith( title, Qt::CaseInsensitive ) )
         {
-            episode = line.section( '"', 1, 1 );
-            episode += " - ";
-            episode += line.section( '#', 1 ).section( ')', 0, 0 );
-            episode += " - ";
-            episode += line.section( '{', 1, 1 ).section( '(', 0, 0 );
-            episode = episode.simplified();
-            ui->listEpisodes->addItem( episode );
+            season = line.section( '#', 1 ).section( '.', 0, 0 ).toInt();
+            episode = line.section( '#', 1 ).section( '.', 1, 1 ).section( ')', 0, 0 ).toInt();
+            name = line.section( '{', 1, 1 ).section( '(', 0, 0 ).simplified();
+            shows.addEpisode( season, episode, name );
         }
 
         progress.setValue( fileIMDB.pos() );
         if( progress.wasCanceled() )
             break;
+    }
+
+    for( int s = 1; s <= shows.numSeasons(); ++s )
+    {
+        for( int e = 1; e <= shows.numEpisodes( s ); ++e )
+            ui->listEpisodes->addItem( show + " - " + QString::number( s ) + "." + QString::number( e ) + " - " + shows.episode( s, e ) );
     }
 
     fileIMDB.close();
