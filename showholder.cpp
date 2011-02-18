@@ -56,6 +56,9 @@ QStringList ShowHolder::episodeList( const int &season ) const
 
 void ShowHolder::addEpisode( const int &season, const int &episode, const QString &title, const bool &override )
 {
+    if( season < 1 || episode < 1 )
+        return;
+
     QString emptyTitle( "" );
     QStringList emptyList;
 
