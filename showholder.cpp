@@ -45,7 +45,7 @@ QStringList ShowHolder::episodeList() const
     for( int s = 0; s < numSeasons(); ++s )
     {
         if( !m_episodes.at( s ).isEmpty() )
-            all.append( m_episodes.at( s ) );
+            all.append( episodeList( s + 1 ) );
     }
 
     return all;
@@ -56,7 +56,11 @@ QStringList ShowHolder::episodeList( const int &season ) const
     QStringList list;
     if( m_episodes.isEmpty() || 1 > season || numSeasons() < season - 1 )
         return list;
-    return m_episodes.at( season - 1 );
+
+    for( int e = 0; e < numEpisodes( season ); ++e )
+        list.append( episode( season, e + 1 ) );
+
+    return list;
 }
 
 void ShowHolder::show( const QString &name )
