@@ -13,13 +13,16 @@ public:
     int numSeasons() const;
     int numEpisodes() const;
     int numEpisodes( const int &season ) const;
+    QString show() const;
     QString episode( const int &season, const int &episode ) const;
     QStringList episodeList() const;
     QStringList episodeList( const int &season ) const;
 
+    void show( const QString &name );
     void addEpisode( const int &season, const int &episode, const QString &title, const bool &override = false );
 
 protected:
+    QString m_show;
     QList <QStringList> m_episodes;
 };
 
