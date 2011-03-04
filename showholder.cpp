@@ -1,6 +1,7 @@
 #include "showholder.hpp"
 
 ShowHolder::ShowHolder() :
+        m_show( "" ),
         m_textFormat( "%show% S%ss%E%ee% %title%" )
 {
 }
