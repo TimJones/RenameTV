@@ -46,6 +46,7 @@ void MainWindow::on_buttonSearch_clicked()
     QString line, name, show = ui->editName->text(), title( tr( "\"" ) + ui->editName->text() + tr( "\"" ) );
     QProgressDialog progress( tr( "Searching file" ), tr( "Abort search" ), 0, fileIMDB.size(), this );
     ShowHolder shows;
+    shows.show( show );
 
     while( !fileIMDBstream.atEnd() )
     {
@@ -63,11 +64,7 @@ void MainWindow::on_buttonSearch_clicked()
             break;
     }
 
-    for( int s = 1; s <= shows.numSeasons(); ++s )
-    {
-        for( int e = 1; e <= shows.numEpisodes( s ); ++e )
-            ui->listEpisodes->addItem( show + " - " + QString::number( s ) + "." + QString::number( e ) + " - " + shows.episode( s, e ) );
-    }
+    ui->listEpisodes->addItems( shows.episodeList() );
 
     fileIMDB.close();
 }
