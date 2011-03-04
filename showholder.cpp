@@ -1,6 +1,7 @@
 #include "showholder.hpp"
 
-ShowHolder::ShowHolder()
+ShowHolder::ShowHolder() :
+        m_textFormat( "%show% S%ss%E%ee% %title%" )
 {
 }
 
@@ -26,6 +27,11 @@ int ShowHolder::numEpisodes( const int &season ) const
     return m_episodes.at( season - 1 ).count();
 }
 
+QString ShowHolder::format() const
+{
+    return m_textFormat;
+}
+
 QString ShowHolder::show() const
 {
     return m_show;
@@ -35,7 +41,37 @@ QString ShowHolder::episode( const int &season, const int &episode ) const
 {
     if( m_episodes.isEmpty() || 1 > season || numSeasons() < season || m_episodes.at( season - 1 ).isEmpty() || m_episodes.at( season - 1 ).count() < episode - 1 )
         return QString( "" );
-    return m_episodes.at( season - 1 ).at( episode - 1 );
+
+    int index = 0;
+    QString formattedName = m_textFormat;
+
+    formattedName.replace( "%show%", m_show );
+    formattedName.replace( "%title%", m_episodes.at( season - 1 ).at( episode - 1 ) );
+
+    // Replace any occurance of %eee% (with any number of 'e's e.g. %e% %ee% %eeeeeeeeee%) with the padded episode number
+    // e.g. %e%     => 1 or 23 or 456
+    //      %ee%    => 01 or 23 or 456
+    //      %eeeee% => 00001 or 00023 or 00456
+    while( ( index = formattedName.indexOf( QRegExp( "%e+%" ) ) ) != -1 )
+    {
+        int width = 0;
+        while( formattedName.at( index + width + 1 ) != '%' )
+            width++;
+
+        formattedName.replace( index, width + 2, QString( "%1" ).arg( episode, width, 10, QChar( '0' ) ) );
+    }
+
+    // and the same with the season number
+    while( ( index = formattedName.indexOf( QRegExp( "%s+%" ) ) ) != -1 )
+    {
+        int width = 0;
+        while( formattedName.at( index + width + 1 ) != '%' )
+            width++;
+
+        formattedName.replace( index, width + 2, QString( "%1" ).arg( season, width, 10, QChar( '0' ) ) );
+    }
+
+    return formattedName;
 }
 
 QStringList ShowHolder::episodeList() const
@@ -66,6 +102,11 @@ QStringList ShowHolder::episodeList( const int &season ) const
 void ShowHolder::show( const QString &name )
 {
     m_show = name;
+}
+
+void ShowHolder::format( const QString &format )
+{
+    m_textFormat = format;
 }
 
 void ShowHolder::addEpisode( const int &season, const int &episode, const QString &title, const bool &override )
