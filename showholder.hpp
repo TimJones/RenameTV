@@ -20,6 +20,7 @@ public:
     QStringList episodeList( const int &season ) const;
 
     void show( const QString &name );
+    void clear();
     void format( const QString &format );
     void addEpisode( const int &season, const int &episode, const QString &title, const bool &override = false );
 

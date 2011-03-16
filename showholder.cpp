@@ -156,6 +156,15 @@ void ShowHolder::show( const QString &name )
     m_show = name;
 }
 
+/*! \brief Clear the ShowHolder of any information
+*/
+
+void ShowHolder::clear()
+{
+    m_show = "";
+    m_episodes.clear();
+}
+
 /*! \brief Set the formatting syntax for episode titles
     \param[in] format The new style format
 
