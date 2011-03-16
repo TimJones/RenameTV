@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->editDisplay->setText( m_shows.format() );
 }
 
 MainWindow::~MainWindow()
@@ -45,6 +46,8 @@ void MainWindow::on_buttonSearch_clicked()
     QString line, name, show = ui->editName->text(), title( tr( "\"" ) + ui->editName->text() + tr( "\"" ) );
     QProgressDialog progress( tr( "Searching file" ), tr( "Abort search" ), 0, fileIMDB.size(), this );
 
+    m_shows.clear();
+
     m_shows.show( show );
 
     while( !fileIMDBstream.atEnd() )
@@ -63,6 +66,7 @@ void MainWindow::on_buttonSearch_clicked()
             break;
     }
 
+    ui->listEpisodes->clear();
     ui->listEpisodes->addItems( m_shows.episodeList() );
 
     fileIMDB.close();
@@ -71,4 +75,16 @@ void MainWindow::on_buttonSearch_clicked()
 void MainWindow::on_editName_returnPressed()
 {
     ui->buttonSearch->click();
+}
+
+void MainWindow::on_editDisplay_returnPressed()
+{
+    ui->buttonDisplay->click();
+}
+
+void MainWindow::on_buttonDisplay_clicked()
+{
+    m_shows.format( ui->editDisplay->text() );
+    ui->listEpisodes->clear();
+    ui->listEpisodes->addItems( m_shows.episodeList() );
 }

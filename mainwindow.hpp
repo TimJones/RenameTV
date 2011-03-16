@@ -23,6 +23,8 @@ private:
     ShowHolder m_shows;
 
 private slots:
+    void on_buttonDisplay_clicked();
+    void on_editDisplay_returnPressed();
     void on_editName_returnPressed();
     void on_buttonSearch_clicked();
 };
