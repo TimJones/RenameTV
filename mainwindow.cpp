@@ -68,3 +68,8 @@ void MainWindow::on_buttonSearch_clicked()
 
     fileIMDB.close();
 }
+
+void MainWindow::on_editName_returnPressed()
+{
+    ui->buttonSearch->click();
+}

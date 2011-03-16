@@ -19,6 +19,7 @@ private:
     Ui::MainWindow *ui;
 
 private slots:
+    void on_editName_returnPressed();
     void on_buttonSearch_clicked();
 };
 
