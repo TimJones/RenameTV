@@ -1,12 +1,11 @@
 #include "mainwindow.hpp"
+
 #include "ui_mainwindow.h"
 
 #include <QDir>
 #include <QTextStream>
 #include <QProgressDialog>
 #include <QMessageBox>
-
-#include "showholder.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -45,8 +44,8 @@ void MainWindow::on_buttonSearch_clicked()
     QTextStream fileIMDBstream( &fileIMDB );
     QString line, name, show = ui->editName->text(), title( tr( "\"" ) + ui->editName->text() + tr( "\"" ) );
     QProgressDialog progress( tr( "Searching file" ), tr( "Abort search" ), 0, fileIMDB.size(), this );
-    ShowHolder shows;
-    shows.show( show );
+
+    m_shows.show( show );
 
     while( !fileIMDBstream.atEnd() )
     {
@@ -56,7 +55,7 @@ void MainWindow::on_buttonSearch_clicked()
             season = line.section( '#', 1 ).section( '.', 0, 0 ).toInt();
             episode = line.section( '#', 1 ).section( '.', 1, 1 ).section( ')', 0, 0 ).toInt();
             name = line.section( '{', 1, 1 ).section( '(', 0, 0 ).simplified();
-            shows.addEpisode( season, episode, name );
+            m_shows.addEpisode( season, episode, name );
         }
 
         progress.setValue( fileIMDB.pos() );
@@ -64,7 +63,7 @@ void MainWindow::on_buttonSearch_clicked()
             break;
     }
 
-    ui->listEpisodes->addItems( shows.episodeList() );
+    ui->listEpisodes->addItems( m_shows.episodeList() );
 
     fileIMDB.close();
 }

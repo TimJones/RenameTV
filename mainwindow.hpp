@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_HPP
 #define MAINWINDOW_HPP
 
+#include "showholder.hpp"
+
 #include <QMainWindow>
 
 namespace Ui {
@@ -17,6 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    ShowHolder m_shows;
 
 private slots:
     void on_editName_returnPressed();
