@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml network
 
 TARGET = RenameTV
 TEMPLATE = app
