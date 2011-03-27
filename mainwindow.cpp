@@ -2,9 +2,7 @@
 
 #include "ui_mainwindow.h"
 
-#include <QDir>
-#include <QTextStream>
-#include <QProgressDialog>
+#include <QRegExp>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->editDisplay->setText( m_shows.format() );
 }
 
 MainWindow::~MainWindow()
@@ -20,56 +17,58 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
+{
+    QString formattedName = ui->editDisplay->text();
+
+    formattedName.replace( "%show%", episode.show );
+    formattedName.replace( "%title%", episode.title );
+
+    int index = 0;
+    while( ( index = formattedName.indexOf( QRegExp( "%e+%" ) ) ) != -1 )
+    {
+        int width = 0;
+        while( formattedName.at( index + width + 1 ) != '%' )
+            width++;
+        formattedName.replace( index, width + 2, QString( "%1" ).arg( episode.episode, width, 10, QChar( '0' ) ) );
+    }
+
+    index = 0;
+    while( ( index = formattedName.indexOf( QRegExp( "%s+%" ) ) ) != -1 )
+    {
+        int width = 0;
+        while( formattedName[ index + width + 1 ] != '%' )
+            width++;
+        formattedName.replace( index, width + 2, QString( "%1" ).arg( episode.season, width, 10, QChar( '0' ) ) );
+    }
+
+    return formattedName;
+}
+
 void MainWindow::on_buttonSearch_clicked()
 {
     if( ui->editName->text().isEmpty() )
     {
-        QMessageBox::warning( this, tr( "No Title" ), tr( "Please enter a series title to search for" ), QMessageBox::Ok, QMessageBox::Ok );
+        QMessageBox::warning( this, tr( "No Title" ), tr( "Please enter a series title to search for" ) );
         return;
     }
 
-    QString strIMDBfile = QDir::toNativeSeparators( QDir::homePath() + tr( "/movies.list" ) );
-    QFile fileIMDB( strIMDBfile );
+    qApp->setOverrideCursor( Qt::WaitCursor );
+    QList< ShowDetail > results = m_show.Search( ui->editName->text() );
+    qApp->restoreOverrideCursor();
 
-    if( !fileIMDB.exists() )
+    QMessageBox::information( this, tr( "Results" ), tr( "Found %1 shows" ).arg( results.count() ) );
+
+    if( results.count() > 0 )
     {
-        QMessageBox::warning( this, tr( "File Not Found" ), tr( "IMDB movie list not found\nPlease download movies.list.gz from IMDB, decompress it and place it in the location below\n" ) + strIMDBfile, QMessageBox::Ok, QMessageBox::Ok );
-        return;
+        ui->listEpisodes->clear();
+        qApp->setOverrideCursor( Qt::WaitCursor );
+        QList< EpisodeDetail > episodes = m_show.Fetch( results[ 0 ] );
+        qApp->restoreOverrideCursor();
+
+        foreach( EpisodeDetail const& episode, episodes )
+            ui->listEpisodes->addItem( FormatEpisode( episode ) );
     }
-
-    ui->listEpisodes->clear();
-
-    fileIMDB.open( QFile::ReadOnly | QFile::Text );
-
-    int season, episode;
-    QTextStream fileIMDBstream( &fileIMDB );
-    QString line, name, show = ui->editName->text(), title( tr( "\"" ) + ui->editName->text() + tr( "\"" ) );
-    QProgressDialog progress( tr( "Searching file" ), tr( "Abort search" ), 0, fileIMDB.size(), this );
-
-    m_shows.clear();
-
-    m_shows.show( show );
-
-    while( !fileIMDBstream.atEnd() )
-    {
-        line = fileIMDBstream.readLine();
-        if( line.startsWith( title, Qt::CaseInsensitive ) )
-        {
-            season = line.section( '#', 1 ).section( '.', 0, 0 ).toInt();
-            episode = line.section( '#', 1 ).section( '.', 1, 1 ).section( ')', 0, 0 ).toInt();
-            name = line.section( '{', 1, 1 ).section( '(', 0, 0 ).simplified();
-            m_shows.addEpisode( season, episode, name );
-        }
-
-        progress.setValue( fileIMDB.pos() );
-        if( progress.wasCanceled() )
-            break;
-    }
-
-    ui->listEpisodes->clear();
-    ui->listEpisodes->addItems( m_shows.episodeList() );
-
-    fileIMDB.close();
 }
 
 void MainWindow::on_editName_returnPressed()
@@ -84,7 +83,5 @@ void MainWindow::on_editDisplay_returnPressed()
 
 void MainWindow::on_buttonDisplay_clicked()
 {
-    m_shows.format( ui->editDisplay->text() );
-    ui->listEpisodes->clear();
-    ui->listEpisodes->addItems( m_shows.episodeList() );
+
 }

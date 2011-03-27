@@ -19,8 +19,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    ShowHolder m_show;
 
-    ShowHolder m_shows;
+    QString FormatEpisode( EpisodeDetail const& episode ) const;
 
 private slots:
     void on_buttonDisplay_clicked();
