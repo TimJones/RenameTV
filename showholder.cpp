@@ -30,9 +30,9 @@ QList< ShowDetail > ShowHolder::Search( QString const& showName )
             else if( xmlData.name() == "name" )
                 results.back().name = xmlData.readElementText();
             else if( xmlData.name() == "started" )
-                results.back().start = QDate::fromString( xmlData.readElementText() );
+                results.back().start = xmlData.readElementText();
             else if( xmlData.name() == "ended" )
-                results.back().end = QDate::fromString( xmlData.readElementText() );
+                results.back().end = xmlData.readElementText();
             else if( xmlData.name() == "status" )
                 results.back().status = xmlData.readElementText();
             else if( xmlData.name() == "genre" )

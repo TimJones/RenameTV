@@ -9,8 +9,8 @@ struct ShowDetail
 {
     int id;
     QString name;
-    QDate start;
-    QDate end;
+    QString start;
+    QString end;
     QString status;
     QString genre;
 };
