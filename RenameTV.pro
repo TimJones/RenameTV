@@ -12,9 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    showholder.cpp
+    showholder.cpp \
+    searchresults.cpp
 
 HEADERS  += mainwindow.hpp \
-    showholder.hpp
+    showholder.hpp \
+    searchresults.hpp
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    searchresults.ui
