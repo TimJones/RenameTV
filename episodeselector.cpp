@@ -15,7 +15,9 @@ EpisodeSelector::~EpisodeSelector()
 
 void EpisodeSelector::AddSeason( int const& season )
 {
-    ui->comboSeasons->addItem( tr( "Season %1" ).arg( season ) );
+    QString seasonName = tr( "Season %1" ).arg( season );
+    ui->comboSeasons->addItem( seasonName );
+    m_map.insert( seasonName, season );
 }
 
 void EpisodeSelector::AddEpisode( QString const& episode )
@@ -35,7 +37,7 @@ bool EpisodeSelector::isEpisodeSelected() const
 
 int EpisodeSelector::GetSelectedSeason() const
 {
-    return ui->comboSeasons->currentIndex() - 1;
+    return m_map.value( ui->comboSeasons->currentText(), -1 );
 }
 
 QStringList EpisodeSelector::GetSelectedEpisodes() const

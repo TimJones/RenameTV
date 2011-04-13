@@ -1,6 +1,7 @@
 #ifndef EPISODESELECTOR_HPP
 #define EPISODESELECTOR_HPP
 
+#include <QMap>
 #include <QDialog>
 #include <QStringList>
 
@@ -26,6 +27,7 @@ public:
 
 private:
     Ui::EpisodeSelector *ui;
+    QMap< QString, int > m_map;
 };
 
 #endif // EPISODESELECTOR_HPP
