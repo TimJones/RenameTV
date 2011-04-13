@@ -57,6 +57,14 @@ QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
         formattedName.replace( index, width + 2, QString( "%1" ).arg( episode.season, width, 10, QChar( '0' ) ) );
     }
 
+#ifdef Q_WS_WIN
+    QList< QChar > badChars;
+    badChars << '\\' << '/' << ':' << '*' << '?' << '"' << '<' << '>' << '|';
+
+    foreach( QChar const& c, badChars )
+        formattedName.remove( c );
+#endif
+
     return formattedName;
 }
 
