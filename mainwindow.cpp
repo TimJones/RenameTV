@@ -17,7 +17,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_lastDir( QDir::toNativeSeparators( QDir::homePath() ) )
 {
     ui->setupUi(this);
 }
@@ -101,9 +102,11 @@ void MainWindow::on_buttonSearch_clicked()
 
 void MainWindow::on_buttonAddFiles_clicked()
 {
-    QStringList files = QFileDialog::getOpenFileNames( this, tr( "Select one or more files to be renamed" ), QDir::toNativeSeparators( QDir::homePath() ), "Videos (*.avi *.m4v *.mov);;All files (*.*)" );
+    QStringList files = QFileDialog::getOpenFileNames( this, tr( "Select one or more files to be renamed" ), m_lastDir, "Videos (*.avi *.m4v *.mov);;All files (*.*)" );
     if( files.count() > 0 )
     {
+        m_lastDir = QDir::toNativeSeparators( QFileInfo( files.back() ).absolutePath() + "/" );
+
         foreach( QString const& file, files )
         {
             QListWidgetItem* item = new QListWidgetItem( QFileInfo( file ).fileName() , ui->listFiles );

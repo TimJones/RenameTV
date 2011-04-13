@@ -21,6 +21,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QString m_lastDir;
     QList< EpisodeDetail > m_episodes;
 
     bool CanRename() const;
