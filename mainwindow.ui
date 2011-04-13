@@ -184,7 +184,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Add episode(s) andor season(s)</string>
+     <string>Add episode(s) and\or season(s)</string>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonEditEpisode">
