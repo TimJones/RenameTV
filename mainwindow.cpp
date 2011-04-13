@@ -194,9 +194,8 @@ void MainWindow::on_buttonRename_clicked()
         newFilename += episodeitem->text();
         newFilename += ".";
         newFilename += fileinfo.suffix();
-        newFilename = QDir::toNativeSeparators( newFilename );
 
-        if( QFile::rename( fileinfo.absoluteFilePath(), newFilename ) )
+        if( QFile::rename( QDir::toNativeSeparators( fileinfo.absoluteFilePath() ), QDir::toNativeSeparators( newFilename ) ) )
         {
             delete fileitem;
             delete episodeitem;
