@@ -66,7 +66,9 @@ QList< EpisodeDetail > ShowHolder::Fetch( ShowDetail const& showDetail )
     {
         if( xmlData.readNextStartElement() )
         {
-            if( xmlData.name() == "Season" )
+            if( xmlData.name() == "Special" )
+                xmlData.skipCurrentElement();
+            else if( xmlData.name() == "Season" )
                 currentSeason = xmlData.attributes().value( "no" ).toString().toInt();
             else if( xmlData.name() == "episode" )
             {
