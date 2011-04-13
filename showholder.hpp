@@ -25,7 +25,7 @@ struct EpisodeDetail
 
     bool operator<( EpisodeDetail const& rhs ) const
     {
-        return show_episode < rhs.show_episode || season < rhs.season || ( season == rhs.season && episode < rhs.episode);
+        return show_episode < rhs.show_episode || season < rhs.season || ( season == rhs.season && episode < rhs.episode );
     }
 };
 
