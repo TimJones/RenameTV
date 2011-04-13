@@ -13,11 +13,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     showholder.cpp \
-    searchresults.cpp
+    searchresults.cpp \
+    episodeselector.cpp
 
 HEADERS  += mainwindow.hpp \
     showholder.hpp \
-    searchresults.hpp
+    searchresults.hpp \
+    episodeselector.hpp
 
 FORMS    += mainwindow.ui \
-    searchresults.ui
+    searchresults.ui \
+    episodeselector.ui

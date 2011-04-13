@@ -1,9 +1,19 @@
 #include "mainwindow.hpp"
-
 #include "ui_mainwindow.h"
 
+#include "episodeselector.hpp"
+#include "searchresults.hpp"
+
 #include <QRegExp>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QInputDialog>
+
+#include <QtDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,6 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+bool MainWindow::CanRename() const
+{
+    return ui->listFiles->count() && ui->listEpisodes->count();
 }
 
 QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
@@ -45,43 +60,149 @@ QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
     return formattedName;
 }
 
+void MainWindow::on_editName_textChanged(QString const& text)
+{
+    ui->buttonSearch->setEnabled( !text.isEmpty() );
+}
+
 void MainWindow::on_buttonSearch_clicked()
 {
-    if( ui->editName->text().isEmpty() )
-    {
-        QMessageBox::warning( this, tr( "No Title" ), tr( "Please enter a series title to search for" ) );
-        return;
-    }
-
+    ShowHolder show;
     qApp->setOverrideCursor( Qt::WaitCursor );
-    QList< ShowDetail > results = m_show.Search( ui->editName->text() );
+    QList< ShowDetail > results = show.Search( ui->editName->text() );
     qApp->restoreOverrideCursor();
 
-    QMessageBox::information( this, tr( "Results" ), tr( "Found %1 shows" ).arg( results.count() ) );
-
-    if( results.count() > 0 )
+    if( results.count() > 0)
     {
-        ui->listEpisodes->clear();
+        int chosen = 0;
+        if( results.count() == 1 )
+            QMessageBox::information( this, tr( "Result" ), tr( "Found '%1'" ).arg( results.front().name ) );
+        else
+        {
+            SearchResults resultsWindow( results, this );
+            if( resultsWindow.exec() != QDialog::Accepted )
+                return;
+            chosen = resultsWindow.GetSelectedShowIndex();
+        }
         qApp->setOverrideCursor( Qt::WaitCursor );
-        QList< EpisodeDetail > episodes = m_show.Fetch( results[ 0 ] );
+        m_episodes = show.Fetch( results[ chosen ] );
         qApp->restoreOverrideCursor();
-
-        foreach( EpisodeDetail const& episode, episodes )
-            ui->listEpisodes->addItem( FormatEpisode( episode ) );
+        ui->buttonAddEpisodes->setEnabled( true );
     }
 }
 
-void MainWindow::on_editName_returnPressed()
+void MainWindow::on_buttonAddFiles_clicked()
 {
-    ui->buttonSearch->click();
+    QStringList files = QFileDialog::getOpenFileNames( this, tr( "Select one or more files to be renamed" ), QDir::toNativeSeparators( QDir::homePath() ), "Videos (*.avi *.m4v *.mov);;All files (*.*)" );
+    if( files.count() > 0 )
+    {
+        foreach( QString const& file, files )
+        {
+            QListWidgetItem* item = new QListWidgetItem( QFileInfo( file ).fileName() , ui->listFiles );
+            item->setToolTip( file );
+            ui->listFiles->addItem( item );
+        }
+        ui->buttonRemoveFiles->setEnabled( true );
+        ui->buttonRename->setEnabled( CanRename() );
+    }
 }
 
-void MainWindow::on_editDisplay_returnPressed()
+void MainWindow::on_buttonRemoveFiles_clicked()
 {
-    ui->buttonDisplay->click();
+    foreach( QListWidgetItem* item, ui->listFiles->selectedItems() )
+        delete item;
+    ui->buttonRemoveFiles->setEnabled( ui->listFiles->count() > 0 );
+    ui->buttonRename->setEnabled( CanRename() );
 }
 
-void MainWindow::on_buttonDisplay_clicked()
+void MainWindow::on_buttonAddEpisodes_clicked()
 {
+    qApp->setOverrideCursor( Qt::WaitCursor );
+    EpisodeSelector selectorWindow( this );
 
+    int currSeason = -1;
+    foreach( EpisodeDetail episode, m_episodes )
+    {
+        if( currSeason != episode.season )
+        {
+            currSeason = episode.season;
+            selectorWindow.AddSeason( currSeason );
+        }
+        selectorWindow.AddEpisode( FormatEpisode( episode ) );
+    }
+
+    qApp->restoreOverrideCursor();
+    if( selectorWindow.exec() != QDialog::Accepted )
+        return;
+
+    if( selectorWindow.isSeasonSelected() )
+    {
+        currSeason = selectorWindow.GetSelectedSeason();
+        foreach( EpisodeDetail episode, m_episodes )
+        {
+            if( currSeason == -1 || episode.season == currSeason )
+                ui->listEpisodes->addItem( FormatEpisode( episode ) );
+        }
+    }
+    else if( selectorWindow.isEpisodeSelected() )
+        ui->listEpisodes->addItems( selectorWindow.GetSelectedEpisodes() );
+    ui->buttonRename->setEnabled( CanRename() );
+}
+
+void MainWindow::on_listEpisodes_itemSelectionChanged()
+{
+    ui->buttonEditEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
+    ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
+}
+
+void MainWindow::on_buttonEditEpisode_clicked()
+{
+    if( ui->listEpisodes->selectedItems().count() < 1 )
+        return;
+
+    bool ok;
+    QListWidgetItem* item = ui->listEpisodes->selectedItems().front();
+    QString episodeTitle = item->text();
+    QString edit = QInputDialog::getText( this, tr( "Edit episode title" ), tr( "Original title:\n  %1  " ).arg( episodeTitle ), QLineEdit::Normal, episodeTitle, &ok );
+    if( ok && !edit.isEmpty() )
+        item->setText( edit );
+    ui->buttonRename->setEnabled( CanRename() );
+}
+
+void MainWindow::on_buttonRemoveEpisode_clicked()
+{
+    foreach( QListWidgetItem* item, ui->listEpisodes->selectedItems() )
+        delete item;
+    ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->count() > 0 );
+    ui->buttonRename->setEnabled( CanRename() );
+}
+
+void MainWindow::on_buttonRename_clicked()
+{
+    if( ui->listFiles->count() < 1 || ui->listEpisodes->count() < 1 )
+        return;
+
+    qApp->setOverrideCursor( Qt::WaitCursor );
+    for( int i = 0; i < ui->listFiles->count() && i < ui->listEpisodes->count(); i++ )
+    {
+        QListWidgetItem* fileitem = ui->listFiles->item( i );
+        QListWidgetItem* episodeitem = ui->listEpisodes->item( i );
+        QFileInfo fileinfo( fileitem->toolTip() );
+
+        QString newFilename = fileinfo.absolutePath();
+        newFilename += "/";
+        newFilename += episodeitem->text();
+        newFilename += ".";
+        newFilename += fileinfo.suffix();
+        newFilename = QDir::toNativeSeparators( newFilename );
+
+        if( QFile::rename( fileinfo.absoluteFilePath(), newFilename ) )
+        {
+            delete fileitem;
+            delete episodeitem;
+            i--;
+        }
+    }
+    qApp->restoreOverrideCursor();
+    ui->buttonRename->setEnabled( CanRename() );
 }
