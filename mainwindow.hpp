@@ -28,6 +28,7 @@ private:
     QString FormatEpisode( EpisodeDetail const& episode ) const;
 
 private slots:
+    void on_listFiles_itemSelectionChanged();
     void on_buttonRename_clicked();
     void on_buttonRemoveEpisode_clicked();
     void on_buttonEditEpisode_clicked();

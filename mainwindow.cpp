@@ -126,6 +126,11 @@ void MainWindow::on_buttonRemoveFiles_clicked()
     ui->buttonRename->setEnabled( CanRename() );
 }
 
+void MainWindow::on_listFiles_itemSelectionChanged()
+{
+    ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
+}
+
 void MainWindow::on_buttonAddEpisodes_clicked()
 {
     qApp->setOverrideCursor( Qt::WaitCursor );
