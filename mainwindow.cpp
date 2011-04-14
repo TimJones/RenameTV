@@ -165,12 +165,6 @@ void MainWindow::on_buttonAddEpisodes_clicked()
     ui->buttonRename->setEnabled( CanRename() );
 }
 
-void MainWindow::on_listEpisodes_itemSelectionChanged()
-{
-    ui->buttonEditEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
-    ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
-}
-
 void MainWindow::on_buttonEditEpisode_clicked()
 {
     if( ui->listEpisodes->selectedItems().count() < 1 )
@@ -191,6 +185,12 @@ void MainWindow::on_buttonRemoveEpisode_clicked()
         delete item;
     ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().count() > 0 );
     ui->buttonRename->setEnabled( CanRename() );
+}
+
+void MainWindow::on_listEpisodes_itemSelectionChanged()
+{
+    ui->buttonEditEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
+    ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
 }
 
 void MainWindow::on_buttonRename_clicked()
