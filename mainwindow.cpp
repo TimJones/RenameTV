@@ -113,7 +113,7 @@ void MainWindow::on_buttonAddFiles_clicked()
             item->setToolTip( file );
             ui->listFiles->addItem( item );
         }
-        ui->buttonRemoveFiles->setEnabled( true );
+        ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
         ui->buttonRename->setEnabled( CanRename() );
     }
 }
@@ -122,7 +122,7 @@ void MainWindow::on_buttonRemoveFiles_clicked()
 {
     foreach( QListWidgetItem* item, ui->listFiles->selectedItems() )
         delete item;
-    ui->buttonRemoveFiles->setEnabled( ui->listFiles->count() > 0 );
+    ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
     ui->buttonRename->setEnabled( CanRename() );
 }
 
@@ -184,7 +184,7 @@ void MainWindow::on_buttonRemoveEpisode_clicked()
 {
     foreach( QListWidgetItem* item, ui->listEpisodes->selectedItems() )
         delete item;
-    ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->count() > 0 );
+    ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().count() > 0 );
     ui->buttonRename->setEnabled( CanRename() );
 }
 
