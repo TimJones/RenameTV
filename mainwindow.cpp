@@ -47,11 +47,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-bool MainWindow::CanRename() const
-{
-    return ui->listFiles->count() && ui->listEpisodes->count();
-}
-
 QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
 {
     QString formattedName = ui->editDisplay->text();
@@ -133,7 +128,7 @@ void MainWindow::on_buttonAddFiles_clicked()
             ui->listFiles->addItem( item );
         }
         ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
-        ui->buttonRename->setEnabled( CanRename() );
+        ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
     }
 }
 
@@ -142,7 +137,7 @@ void MainWindow::on_buttonRemoveFiles_clicked()
     foreach( QListWidgetItem* item, ui->listFiles->selectedItems() )
         delete item;
     ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
-    ui->buttonRename->setEnabled( CanRename() );
+    ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
 void MainWindow::on_listFiles_itemSelectionChanged()
@@ -181,7 +176,7 @@ void MainWindow::on_buttonAddEpisodes_clicked()
     }
     else if( selectorWindow.isEpisodeSelected() )
         ui->listEpisodes->addItems( selectorWindow.GetSelectedEpisodes() );
-    ui->buttonRename->setEnabled( CanRename() );
+    ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
 void MainWindow::on_buttonEditEpisode_clicked()
@@ -195,7 +190,7 @@ void MainWindow::on_buttonEditEpisode_clicked()
     QString edit = QInputDialog::getText( this, tr( "Edit episode title" ), tr( "Original title:\n  %1  " ).arg( episodeTitle ), QLineEdit::Normal, episodeTitle, &ok );
     if( ok && !edit.isEmpty() )
         item->setText( edit );
-    ui->buttonRename->setEnabled( CanRename() );
+    ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
 void MainWindow::on_buttonRemoveEpisode_clicked()
@@ -203,7 +198,7 @@ void MainWindow::on_buttonRemoveEpisode_clicked()
     foreach( QListWidgetItem* item, ui->listEpisodes->selectedItems() )
         delete item;
     ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().count() > 0 );
-    ui->buttonRename->setEnabled( CanRename() );
+    ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
 void MainWindow::on_listEpisodes_itemSelectionChanged()
@@ -238,5 +233,5 @@ void MainWindow::on_buttonRename_clicked()
         }
     }
     qApp->restoreOverrideCursor();
-    ui->buttonRename->setEnabled( CanRename() );
+    ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }

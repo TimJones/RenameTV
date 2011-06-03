@@ -43,7 +43,6 @@ private:
     QString m_lastDir;
     QList< EpisodeDetail > m_episodes;
 
-    bool CanRename() const;
     QString FormatEpisode( EpisodeDetail const& episode ) const;
 
 private slots:
