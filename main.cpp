@@ -17,9 +17,18 @@ You should have received a copy of the GNU General Public License
 along with RenameTV.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file main.cpp
+    \brief Entry point for the application
+*/
+
 #include <QtGui/QApplication>
 #include "mainwindow.hpp"
 
+//! The main entry point
+/*! \param argc An integer specifying number of command line arguments (the first being the application name)
+    \param argv A pointer to char array containing the command line arguments
+    \return An integer representing the finishing state of the application
+*/
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
