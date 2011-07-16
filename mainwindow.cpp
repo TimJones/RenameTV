@@ -17,6 +17,12 @@ You should have received a copy of the GNU General Public License
 along with RenameTV.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*! \file mainwindow.hpp
+    \brief Definition for the MainWindow class
+    \file mainwindow.cpp
+    \brief Implimentation for the MainWindow class
+*/
+
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
@@ -34,6 +40,14 @@ along with RenameTV.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtDebug>
 
+/*! \class MainWindow
+    \headerfile mainwindow.hpp
+    \brief The main GUI window class
+*/
+
+/*! \brief Constructor
+    \param parent QWidget pointer to the parent QWidget of the MainWindow
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -42,11 +56,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+/*! \brief Destructor
+*/
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/*! \brief Formats an EpisodeDetail object into a QString
+    \sa EpisodeDetail
+    \param episode A constant reference to an EpisodeDetail object
+    \return A QString object with the episode details formatted as per user input
+*/
 QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
 {
     QString formattedName = ui->editDisplay->text();
@@ -83,11 +104,20 @@ QString MainWindow::FormatEpisode( EpisodeDetail const& episode ) const
     return formattedName;
 }
 
+/*! \brief Called when the text in editName changes
+    \param text A constant reference to the new text in editName
+*/
 void MainWindow::on_editName_textChanged(QString const& text)
 {
     ui->buttonSearch->setEnabled( !text.isEmpty() );
 }
 
+/*! \brief Called when buttonSearch is clicked
+    \sa ShowHolder
+    When buttonSearch is clicked, a ShowHolder object is created to search for the show name
+    (held in editName) and, if more than one match is found, a selection window is show to the user.
+    Once a show is selected, the XML data is fetched and parsed.
+*/
 void MainWindow::on_buttonSearch_clicked()
 {
     ShowHolder show;
@@ -114,6 +144,9 @@ void MainWindow::on_buttonSearch_clicked()
     }
 }
 
+/*! \brief Called when buttonAddFiles is clicked
+    Opens a QFileDialog and allows the user to select mutliple files to rename.
+ */
 void MainWindow::on_buttonAddFiles_clicked()
 {
     QStringList files = QFileDialog::getOpenFileNames( this, tr( "Select one or more files to be renamed" ), m_lastDir, "Videos (*.avi *.m4v *.mov);;All files (*.*)" );
@@ -132,6 +165,9 @@ void MainWindow::on_buttonAddFiles_clicked()
     }
 }
 
+/*! \brief Called when buttonRemoveFiles is clicked
+    Removes all the currently highlighted items in listFiles
+*/
 void MainWindow::on_buttonRemoveFiles_clicked()
 {
     foreach( QListWidgetItem* item, ui->listFiles->selectedItems() )
@@ -140,11 +176,18 @@ void MainWindow::on_buttonRemoveFiles_clicked()
     ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
+/*! \brief Called when the selection of listFiles changes
+    Used to update whether buttonRemoveFiles should be enabled or not.
+*/
 void MainWindow::on_listFiles_itemSelectionChanged()
 {
     ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
 }
 
+/*! \brief Called when buttonAddEdpisodes is clicked
+    \sa EpisodeSelector
+    Opens the EpisodeSelector window allowing the user to select episode names
+*/
 void MainWindow::on_buttonAddEpisodes_clicked()
 {
     qApp->setOverrideCursor( Qt::WaitCursor );
@@ -179,6 +222,9 @@ void MainWindow::on_buttonAddEpisodes_clicked()
     ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
+/*! \brief Called when buttonEditEpisode is clicked
+    Allows the user to manually edit an episode name.
+*/
 void MainWindow::on_buttonEditEpisode_clicked()
 {
     if( ui->listEpisodes->selectedItems().count() < 1 )
@@ -193,6 +239,8 @@ void MainWindow::on_buttonEditEpisode_clicked()
     ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
+/*! \brief Called when buttonRemoveEpisode is clicked
+*/
 void MainWindow::on_buttonRemoveEpisode_clicked()
 {
     foreach( QListWidgetItem* item, ui->listEpisodes->selectedItems() )
@@ -201,12 +249,16 @@ void MainWindow::on_buttonRemoveEpisode_clicked()
     ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
 }
 
+/*! \brief Called when the selection of listEpisodes changes
+*/
 void MainWindow::on_listEpisodes_itemSelectionChanged()
 {
     ui->buttonEditEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
     ui->buttonRemoveEpisode->setEnabled( ui->listEpisodes->selectedItems().size() > 0 );
 }
 
+/*! \brief Called when buttonRename is clicked
+*/
 void MainWindow::on_buttonRename_clicked()
 {
     if( ui->listFiles->count() < 1 || ui->listEpisodes->count() < 1 )
