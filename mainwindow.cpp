@@ -38,8 +38,6 @@ along with RenameTV.  If not, see <http://www.gnu.org/licenses/>.
 #include <QFileDialog>
 #include <QInputDialog>
 
-#include <QtDebug>
-
 /*! \class MainWindow
     \headerfile mainwindow.hpp
     \brief The main GUI window class
