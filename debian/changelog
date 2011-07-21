@@ -1,3 +1,10 @@
+renametv (1.0.1-1) unstable; urgency=low
+
+  * New upstream release
+    - Added a message box response for no matches on a search
+
+ -- Tim Jones <tim@freakinabox.com>  Thu, 21 Jul 2011 21:37:52 +0200
+
 renametv (1.0.0-1) unstable; urgency=low
 
   * Initial release
