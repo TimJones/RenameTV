@@ -9,6 +9,10 @@ QT       += network
 TARGET = RenameTV
 TEMPLATE = app
 
+unix {
+    target.path =/usr/bin
+    INSTALLS += target
+}
 
 SOURCES += main.cpp\
         mainwindow.cpp \
