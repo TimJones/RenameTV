@@ -10,7 +10,7 @@ ln -snf $SOURCE_DIR/ $PROJECT-$VERSION
 
 # Create the orig tarball, excluding the pwd (within the symlink) so we don't
 #  get circular references
-tar --exclude-vcs --exclude "$PROJECT-$VERSION/${PWD##*/}/*" --exclude "$PROJECT-$VERSION/${PWD##*/}" -czhvf ${PROJECT}_${VERSION}.orig.tar.gz $PROJECT-$VERSION/
+tar --exclude-vcs --exclude --exclude "$PROJECT-$VERSION/build/*" --exclude "$PROJECT-$VERSION/build" --exclude "$PROJECT-$VERSION/${PWD##*/}/*" --exclude "$PROJECT-$VERSION/${PWD##*/}" -czhvf ${PROJECT}_${VERSION}.orig.tar.gz $PROJECT-$VERSION/
 
 # Remove the symlink and extract the tarball here
 #   - debuild will follow the symlink and output it's files in the parent of the 
