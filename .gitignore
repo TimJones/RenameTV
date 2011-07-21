@@ -1,0 +1,5 @@
+RenameTV.pro.user
+/build
+/docs/*.tmp
+/docs/html
+/docs/latex
