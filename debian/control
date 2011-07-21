@@ -1,0 +1,15 @@
+Source: renametv
+Section: utils
+Priority: extra
+Maintainer: Tim Jones <tim@freakinabox.com>
+Build-Depends: debhelper (>= 7.0.50~), qt4-qmake, libqt4-dev
+Standards-Version: 3.9.1
+Homepage: https://github.com/TimJones/RenameTV.git
+
+Package: renametv
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Fetch TV episode names and apply them to your video archive
+ RenameTV is a small Qt4-based application that helps you sort your TV show
+ archive by allowing you to create a standard naming convention accross all
+ your video files, and also fetches individual episode titles titles to use.
