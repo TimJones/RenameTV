@@ -1,0 +1,45 @@
+RenameTV -- For the batch renaming of TV show files
+===================================================
+
+Description
+-----------
+RenameTV is a simple application to rename files (video episodes of TV shows)
+with a standard nameing convention, specified by the user. It uses the XML
+services provided by TVRage (http://www.tvrage.com) to fetch show and episode
+information to use in the renaming.
+
+License
+-------
+RenameTV is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RenameTV is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with RenameTV.  If not, see <http://www.gnu.org/licenses/>.
+
+Installation
+------------
+Up-to-date binaries for MS Windows (.exe), Linux (RedHat\SuSE\etc .rpm
+Debian\Ubuntu\etc .deb) are available at:
+https://github.com/TimJones/RenameTV/downloads
+
+Documentation
+-------------
+All documentation is available on the GitHub Wiki for RenameTV
+
+Requirements
+------------
+RenameTV relies on the Qt 4.7.0 version of the QtCore, QtGui, QtXML, and
+QtNetwork libraries. To build from source, QtCreator and the QtSDK are needed
+also.
+
+Changelog
+---------
+1.0	First official release
+Author	Tim Jones (tim@freakinabox.com)
