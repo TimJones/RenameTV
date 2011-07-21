@@ -140,6 +140,10 @@ void MainWindow::on_buttonSearch_clicked()
         qApp->restoreOverrideCursor();
         ui->buttonAddEpisodes->setEnabled( true );
     }
+    else
+    {
+        QMessageBox::information( this, tr( "Result" ), tr( "No shows found to match '%1'" ).arg( ui->editName->text() ) );
+    }
 }
 
 /*! \brief Called when buttonAddFiles is clicked
