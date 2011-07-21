@@ -6,7 +6,7 @@
 
 QT       += network
 
-TARGET = RenameTV
+TARGET = renametv
 TEMPLATE = app
 
 unix {
