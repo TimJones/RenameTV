@@ -19,8 +19,7 @@ rm $PROJECT-$VERSION
 tar -xvf ${PROJECT}_${VERSION}.orig.tar.gz
 
 # Build & sign the source package
-cd $PROJECT-$VERSION
-debuild -S -sa
+( cd $PROJECT-$VERSION && exec debuild -S -sa )
 
 # Now clean up
-rm -rf $PROJECT-$VERSION/
+rm -rf $PROJECT-$VERSION
