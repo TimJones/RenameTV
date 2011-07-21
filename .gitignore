@@ -3,3 +3,4 @@ RenameTV.pro.user
 /docs/*.tmp
 /docs/html
 /docs/latex
+/package/
