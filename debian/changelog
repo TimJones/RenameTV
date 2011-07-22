@@ -1,3 +1,10 @@
+renametv (1.0.2-0ubuntu1ppa1~ReLeAsEgOeShErE1) ReLeAsEgOeShErE; urgency=low
+
+  * New upstream release
+    - Gave the season\episode selector window a default selection
+
+ -- Tim Jones <tim@freakinabox.com>  Fri, 22 Jul 2011 19:24:23 +0200
+
 renametv (1.0.1-0ubuntu1ppa1~ReLeAsEgOeShErE1) ReLeAsEgOeShErE; urgency=low
 
   * New upstream release
