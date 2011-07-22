@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PROJECT=renametv
+TARGETS=( lucid maverick natty )
 SOURCE_DIR=`cd ../ && pwd`
 VERSION=`cat $SOURCE_DIR/VERSION`
 PWD=`pwd`
@@ -18,8 +19,16 @@ tar --exclude-vcs --exclude --exclude "$PROJECT-$VERSION/build/*" --exclude "$PR
 rm $PROJECT-$VERSION
 tar -xvf ${PROJECT}_${VERSION}.orig.tar.gz
 
-# Build & sign the source package
-( cd $PROJECT-$VERSION && exec debuild -S -sa )
+# Create a copy of the debian changelog file for our editing
+cp $PROJECT-$VERSION/debian/changelog ./changelog.orig
+
+# Now edit the changelog for each disto and build the source package
+for RELEASE in "${TARGETS[@]}"
+do
+    sed "s|%%release%%|$RELEASE|g" changelog.orig > $PROJECT-$VERSION/debian/changelog
+    ( cd $PROJECT-$VERSION && debuild -S -sa )
+done
 
 # Now clean up
+rm changelog.orig
 rm -rf $PROJECT-$VERSION
