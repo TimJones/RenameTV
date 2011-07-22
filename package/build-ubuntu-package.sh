@@ -25,7 +25,7 @@ cp $PROJECT-$VERSION/debian/changelog ./changelog.orig
 # Now edit the changelog for each disto and build the source package
 for RELEASE in "${TARGETS[@]}"
 do
-    sed "s|%%release%%|$RELEASE|g" changelog.orig > $PROJECT-$VERSION/debian/changelog
+    sed "s|ReLeAsEgOeShErE|$RELEASE|g" changelog.orig > $PROJECT-$VERSION/debian/changelog
     ( cd $PROJECT-$VERSION && debuild -S -sa )
 done
 
