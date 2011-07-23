@@ -1,3 +1,9 @@
+renametv (1.0.2-0ubuntu1ppa2~ReLeAsEgOeShErE1) ReLeAsEgOeShErE; urgency=low
+
+  - Added menu item entries and supporting icons
+
+ -- Tim Jones <tim@freakinabox.com>  Sat, 23 Jul 2011 08:49:43 +0200
+
 renametv (1.0.2-0ubuntu1ppa1~ReLeAsEgOeShErE1) ReLeAsEgOeShErE; urgency=low
 
   * New upstream release
