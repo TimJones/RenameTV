@@ -9,6 +9,9 @@ QT       += network
 TARGET = RenameTV
 TEMPLATE = app
 
+win32 {
+    RC_FILE += package\RenameTV.rc
+}
 
 SOURCES += main.cpp\
         mainwindow.cpp \
