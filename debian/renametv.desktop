@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=RenameTV
+Comment=Rename your TV episode files in bulk
+Exec=renametv
+Terminal=false
+Icon=renametv
+Categories=Qt;Utility;Video;AudioVideo;
