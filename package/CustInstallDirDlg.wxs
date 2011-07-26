@@ -14,7 +14,10 @@
     <Fragment>
         <UI>
             <Dialog Id="CustInstallDirDlg" Width="370" Height="270" Title="!(loc.InstallDirDlg_Title)">
-                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)" />
+                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.WixUINext)">
+					<Publish Property="ALLUSERS" Value="{}">INSTALLFORUSER = "cur"</Publish>
+					<Publish Property="ALLUSERS" Value="1">INSTALLFORUSER = "all"</Publish>
+				</Control>
                 <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.WixUIBack)" />
                 <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.WixUICancel)">
                     <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
@@ -29,7 +32,14 @@
                 <Control Id="FolderLabel" Type="Text" X="20" Y="60" Width="290" Height="30" NoPrefix="yes" Text="!(loc.InstallDirDlgFolderLabel)" />
                 <Control Id="Folder" Type="PathEdit" X="20" Y="100" Width="320" Height="18" Property="WIXUI_INSTALLDIR" Indirect="yes" />
                 <Control Id="ChangeFolder" Type="PushButton" X="20" Y="120" Width="56" Height="17" Text="!(loc.InstallDirDlgChange)" />
-				<Control Id="DesktopShortcut" Type="CheckBox" X="20" Y="160" Width="290" Height="17" Property="INSTALLDESKTOPSHORTCUT" CheckBoxValue="1" Text="Create a shortcut on the desktop." />
+				
+				<Control Id="UserSelection" Type="RadioButtonGroup" X="26" Y="140" Width="305" Height="45" Property="INSTALLFORUSER" Text="Install for " HasBorder="yes">
+					<RadioButtonGroup Property="INSTALLFORUSER">
+						<RadioButton Value="cur" X="10" Y="10" Width="290" Height="16" Text="Just Me" />
+						<RadioButton Value="all" X="10" Y="27" Width="290" Height="16" Text="Everyone" />
+					</RadioButtonGroup>
+				</Control>
+				<Control Id="DesktopShortcut" Type="CheckBox" X="22" Y="190" Width="290" Height="17" Property="INSTALLDESKTOPSHORTCUT" CheckBoxValue="1" Text="Create a shortcut on the desktop." />
 			</Dialog>
         </UI>
     </Fragment>

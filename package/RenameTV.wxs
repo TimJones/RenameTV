@@ -16,6 +16,7 @@
 		<!-- UI install wizard setup -->
 		<Property Id="WIXUI_INSTALLDIR" Value="APPDIR" />
 		<Property Id="INSTALLDESKTOPSHORTCUT" Value="1" />
+		<Property Id="INSTALLFORUSER" Value="cur" />
 		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch RenameTV" />
 		<Property Id="WixShellExecTarget" Value="[#RenameTV.exe]" />
 		<CustomAction Id="LaunchApp" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
