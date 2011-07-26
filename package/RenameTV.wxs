@@ -18,6 +18,7 @@
 		<Property Id="WixShellExecTarget" Value="[#RenameTV.exe]" />
 		<CustomAction Id="LaunchApp" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 		<UIRef Id="WixUI_InstallDir" />
+		<WixVariable Id="WixUILicenseRtf" Value="License-GPL3.rtf" />
 
 		<!-- Install target folder -->
         <Directory Id="TARGETDIR" Name="SourceDir">
