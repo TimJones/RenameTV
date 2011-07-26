@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="a6228c64-6f94-4c40-ba7a-b12a2f2266c8"
+			 UpgradeCode="2d0c1631-6634-475d-b4d1-1452aef63a0a"
+			 Name="RenameTV"
+			 Version="1.0.2"
+			 Manufacturer="Tim Jones"
+			 Language="1033">
+		<!-- Package information -->
+        <Package Id="*" InstallerVersion="300" Compressed="yes" />
+        <Media Id="1" Cabinet="RenameTV.cab" EmbedCab="yes" />
+		<Icon Id="RenameTV.ico" SourceFile="RenameTV.ico" />
+		<Property Id="ARPPRODUCTICON" Value="RenameTV.ico" />
+        <Condition Message="You need to be an administrator to install this product.">Privileged</Condition>
+
+		<!-- UI install wizard setup -->
+		<Property Id="WIXUI_INSTALLDIR" Value="APPDIR" />
+		<Property Id="WixShellExecTarget" Value="[#RenameTV.exe]" />
+		<CustomAction Id="LaunchApp" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+		<UIRef Id="WixUI_InstallDir" />
+
+		<!-- Install target folder -->
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="APPDIR" Name="RenameTV" />
+            </Directory>
+			<!-- Install Start Menu folder -->
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="AppMenuFolder" Name="RenameTV" />
+			</Directory>
+        </Directory>
+
+		<!-- Install files to target folder -->
+        <DirectoryRef Id="APPDIR">
+            <Component Id="RenameTV.exe" Guid="*">
+                <File Id="RenameTV.exe" Source="..\build\release\RenameTV.exe" Checksum="yes" KeyPath="yes" />
+            </Component>
+			<Component Id="mingwm10.dll" Guid="*">
+                <File Id="mingwm10.dll" Source="..\..\..\..\..\QtSDK\mingw\bin\mingwm10.dll" DefaultLanguage="0" Checksum="yes" KeyPath="yes" />
+            </Component>
+			<Component Id="libgcc_s_dw2_1.dll" Guid="*">
+                <File Id="libgcc_s_dw2_1.dll" Source="..\..\..\..\..\QtSDK\mingw\bin\libgcc_s_dw2-1.dll" DefaultLanguage="0" Checksum="yes" KeyPath="yes" />
+            </Component>
+            <Component Id="QtCore4.dll" Guid="*">
+                <File Id="QtCore4.dll" Source="..\..\..\..\..\QtSDK\Desktop\Qt\4.7.3\mingw\bin\QtCore4.dll" DefaultLanguage="0" Checksum="yes" KeyPath="yes" />
+            </Component>
+            <Component Id="QtGui4.dll" Guid="*">
+                <File Id="QtGui4.dll" Source="..\..\..\..\..\QtSDK\Desktop\Qt\4.7.3\mingw\bin\QtGui4.dll" DefaultLanguage="0" Checksum="yes" KeyPath="yes" />
+            </Component>
+            <Component Id="QtNetwork4.dll" Guid="*">
+                <File Id="QtNetwork4.dll" Source="..\..\..\..\..\QtSDK\Desktop\Qt\4.7.3\mingw\bin\QtNetwork4.dll" DefaultLanguage="0" Checksum="yes" KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+		<!-- Install shortcuts in Start Menu -->
+		<DirectoryRef Id="AppMenuFolder">
+			<Component Id="AppShortcut" Guid="*">
+				<Shortcut Id="AppStartMenuShortcut"
+						  Name="RenameTV"
+						  Description="Rename your TV episode files in bulk"
+						  Target="[APPDIR]RenameTV.exe"
+						  WorkingDirectory="APPDIR" />
+				<Shortcut Id="AppStartMenuUninstall"
+						  Name="Uninstall RenameTV"
+						  Target="[SystemFolder]msiexec.exe"
+						  Arguments="/x [ProductCode]"
+						  Description="Uninstall RenameTV" />
+				<RegistryValue Root="HKCU" Key="Software\RenameTV" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+				<RemoveFolder Id="AppMenuFolder" On="uninstall" />
+			</Component>
+		</DirectoryRef>
+
+		<!-- Indicate the features to be installed -->
+		<Feature Id="MainApp" Title="Main Application" Level="1">
+			<ComponentRef Id="RenameTV.exe" />
+			<ComponentRef Id="mingwm10.dll" />
+			<ComponentRef Id="libgcc_s_dw2_1.dll" />
+			<ComponentRef Id="QtCore4.dll" />
+			<ComponentRef Id="QtGui4.dll" />
+			<ComponentRef Id="QtNetwork4.dll" />
+			<ComponentRef Id="AppShortcut" />
+		</Feature>
+    </Product>
+</Wix>
