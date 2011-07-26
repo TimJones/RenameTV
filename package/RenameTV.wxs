@@ -15,9 +15,11 @@
 
 		<!-- UI install wizard setup -->
 		<Property Id="WIXUI_INSTALLDIR" Value="APPDIR" />
+		<Property Id="INSTALLDESKTOPSHORTCUT" Value="1" />
+		<Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch RenameTV" />
 		<Property Id="WixShellExecTarget" Value="[#RenameTV.exe]" />
 		<CustomAction Id="LaunchApp" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
-		<UIRef Id="WixUI_InstallDir" />
+		<UIRef Id="CustUI_InstallDir" />
 		<WixVariable Id="WixUILicenseRtf" Value="License-GPL3.rtf" />
 
 		<!-- Install target folder -->
@@ -29,6 +31,8 @@
 			<Directory Id="ProgramMenuFolder">
 				<Directory Id="AppMenuFolder" Name="RenameTV" />
 			</Directory>
+			<!-- Install Desktop Icon -->
+			<Directory Id="DesktopFolder" Name="Desktop" />
         </Directory>
 
 		<!-- Install files to target folder -->
@@ -69,6 +73,18 @@
 				<RemoveFolder Id="AppMenuFolder" On="uninstall" />
 			</Component>
 		</DirectoryRef>
+		<!-- Install shortcut on the Dessktop -->
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="DesktopShortcut" Guid="*">
+				<Condition>INSTALLDESKTOPSHORTCUT</Condition>
+				<Shortcut Id="AppDesktopShortcut"
+						  Name="RenameTV"
+						  Description="Rename your TV episode files in bulk"
+						  Target="[APPDIR]RenameTV.exe"
+						  WorkingDirectory="APPDIR" />
+				<RegistryValue Root="HKCU" Key="Software\RenameTV" Name="dtopsc" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
 
 		<!-- Indicate the features to be installed -->
 		<Feature Id="MainApp" Title="Main Application" Level="1">
@@ -79,6 +95,7 @@
 			<ComponentRef Id="QtGui4.dll" />
 			<ComponentRef Id="QtNetwork4.dll" />
 			<ComponentRef Id="AppShortcut" />
+			<ComponentRef Id="DesktopShortcut" />
 		</Feature>
     </Product>
 </Wix>
