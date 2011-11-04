@@ -224,12 +224,12 @@
      <rect>
       <x>10</x>
       <y>140</y>
-      <width>261</width>
+      <width>121</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Add files to rename</string>
+     <string>Add files</string>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonRemoveFiles">
@@ -246,6 +246,19 @@
     </property>
     <property name="text">
      <string>Remove selected files</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonAddDir">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>140</y>
+      <width>121</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add directory</string>
     </property>
    </widget>
   </widget>

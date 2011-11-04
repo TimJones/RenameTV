@@ -37,6 +37,7 @@ along with RenameTV.  If not, see <http://www.gnu.org/licenses/>.
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QInputDialog>
+#include <QDirIterator>
 
 /*! \class MainWindow
     \headerfile mainwindow.hpp
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     m_lastDir( QDir::toNativeSeparators( QDir::homePath() ) )
 {
+    m_videoFileTypes << "*.avi" << "*.m4v" << "*.mov" << "*.mpg" << "*.wmv";
     ui->setupUi(this);
 }
 
@@ -164,6 +166,32 @@ void MainWindow::on_buttonAddFiles_clicked()
         }
         ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
         ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
+    }
+}
+
+/*! \brief Called when buttonAddDir is clicked
+    Opens a QFileDialog and allows the user to select a directory, the contents of which are scanned for video files and added.
+ */
+void MainWindow::on_buttonAddDir_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory( this, tr( "Select directory to scan" ), m_lastDir );
+    if( !dir.isEmpty() )
+    {
+        qApp->setOverrideCursor( Qt::WaitCursor );
+
+        m_lastDir = dir;
+        QDirIterator dirIt( dir, m_videoFileTypes, QDir::Files | QDir::NoDotAndDotDot, QDirIterator::Subdirectories );
+        while( dirIt.hasNext() )
+        {
+            dirIt.next();
+            QListWidgetItem* item = new QListWidgetItem( dirIt.fileName() , ui->listFiles );
+            item->setToolTip( dirIt.filePath() );
+            ui->listFiles->addItem( item );
+        }
+        ui->buttonRemoveFiles->setEnabled( ui->listFiles->selectedItems().count() > 0 );
+        ui->buttonRename->setEnabled( ui->listFiles->count() && ui->listEpisodes->count() );
+
+        qApp->restoreOverrideCursor();
     }
 }
 
