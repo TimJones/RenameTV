@@ -153,7 +153,7 @@ void MainWindow::on_buttonSearch_clicked()
  */
 void MainWindow::on_buttonAddFiles_clicked()
 {
-    QStringList files = QFileDialog::getOpenFileNames( this, tr( "Select one or more files to be renamed" ), m_lastDir, "Videos (*.avi *.m4v *.mov);;All files (*.*)" );
+    QStringList files = QFileDialog::getOpenFileNames( this, tr( "Select one or more files to be renamed" ), m_lastDir, tr( "Videos (%1);;All files (*.*)" ).arg( m_videoFileTypes.join( " " ) ) );
     if( files.count() > 0 )
     {
         m_lastDir = QDir::toNativeSeparators( QFileInfo( files.back() ).absolutePath() + "/" );
