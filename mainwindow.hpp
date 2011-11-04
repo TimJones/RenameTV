@@ -41,6 +41,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QString m_lastDir;
+    QStringList m_videoFileTypes;
     QList< EpisodeDetail > m_episodes;
 
     QString FormatEpisode( EpisodeDetail const& episode ) const;
@@ -55,7 +56,9 @@ private slots:
     void on_editName_textChanged(QString const& text);
     void on_buttonRemoveFiles_clicked();
     void on_buttonAddFiles_clicked();
+    void on_buttonAddDir_clicked();
     void on_buttonSearch_clicked();
+
 };
 
 #endif // MAINWINDOW_HPP
