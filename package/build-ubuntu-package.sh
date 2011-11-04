@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT=renametv
-TARGETS=( lucid maverick natty )
+TARGETS=( lucid maverick natty oneiric )
 SOURCE_DIR=`cd ../ && pwd`
 VERSION=`cat $SOURCE_DIR/VERSION`
 PWD=`pwd`
